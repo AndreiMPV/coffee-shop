@@ -18,12 +18,12 @@ import static org.shop.service.product.ProductFactory.*;
 
 public class Main {
     public static void main(String[] args) {
-        Product largeCoffee = produceBeverage(Coffee.class, Coffee.CoffeeSizeType.LARGE, 3.55);
-        Product coffeeWithMilk = produceBeverageWithExtra(ExtraMilk.class, largeCoffee, 0.32);
-        Product smallCoffee = produceBeverage(Coffee.class, Coffee.CoffeeSizeType.SMALL, 2.55);
-        Product smallCoffeeWithMilk = produceBeverageWithExtra(SpecialRoast.class, smallCoffee, 0.95);
+        Product largeCoffee = produceProduct(Coffee.class, Coffee.CoffeeSizeType.LARGE, 3.55);
+        Product coffeeWithMilk = produceProductWithExtra(ExtraMilk.class, largeCoffee, 0.32);
+        Product smallCoffee = produceProduct(Coffee.class, Coffee.CoffeeSizeType.SMALL, 2.55);
+        Product smallCoffeeWithMilk = produceProductWithExtra(SpecialRoast.class, smallCoffee, 0.95);
         Product baconRoll = new BaconRoll( 4.53);
-        Product juice = produceBeverage(OrangeFreshJuice.class, OrangeFreshJuice.JuiceSizeType.L_0_25, 3.95);
+        Product juice = produceProduct(OrangeFreshJuice.class, OrangeFreshJuice.JuiceSizeType.L_0_25, 3.95);
 
         CalculateStrategyResolver calculateStrategyResolver = new CalculateStrategyResolver();
         OrderService orderService = new OrderService(calculateStrategyResolver);

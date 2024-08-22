@@ -9,7 +9,7 @@ import java.lang.reflect.Constructor;
 
 public class ProductFactory {
 
-    public static <T extends Beverage, S extends  Measurable> T produceBeverage(Class<T> clazz, S clazzSize, double cost) {
+    public static <T extends Beverage, S extends  Measurable> T produceProduct(Class<T> clazz, S clazzSize, double cost) {
         try {
             Constructor<T> constructor = clazz.getConstructor(clazzSize.getClass(), double.class);
             return constructor.newInstance(clazzSize, cost);
@@ -18,7 +18,7 @@ public class ProductFactory {
         }
     }
 
-    public static <T extends Extra> T produceBeverageWithExtra(Class<T> clazzExtra, Product clazzBeverage, double cost) {
+    public static <T extends Extra> T produceProductWithExtra(Class<T> clazzExtra, Product clazzBeverage, double cost) {
         try {
             Constructor<T> constructor = clazzExtra.getConstructor(Product.class, double.class);
             return constructor.newInstance(clazzBeverage, cost);

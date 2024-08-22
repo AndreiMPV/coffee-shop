@@ -4,7 +4,6 @@ import org.shop.model.bonus.BonusType;
 import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
-import org.shop.model.product.extra.Extra;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +18,7 @@ public class NoStampCardCostCalculationStrategy implements CostCalculationStrate
         Map<ProductGroup, List<Product>> groupedProducts = products.stream()
                 .collect(Collectors.groupingBy(Product::getGroup));
 
-        boolean hasSnack = groupedProducts.containsKey(ProductGroup.SNAK);
+        boolean hasSnack = groupedProducts.containsKey(ProductGroup.SNACK);
         boolean hasBeverage = groupedProducts.containsKey(ProductGroup.BEVERAGE);
 
         if (hasSnack && hasBeverage) {

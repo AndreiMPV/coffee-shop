@@ -1,4 +1,4 @@
-package org.shop.model.product.snak;
+package org.shop.model.product.snack;
 
 
 public class BaconRoll extends Snack {

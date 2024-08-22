@@ -24,7 +24,7 @@ public class DefaultReceiptPrintServiceTest {
         OrderService orderService = mock(OrderService.class);
         DefaultReceiptPrintService receiptPrintService = new DefaultReceiptPrintService(orderService);
 
-        Product snack = mockProduct(ProductGroup.SNAK, 4.00, new ArrayList<>());
+        Product snack = mockProduct(ProductGroup.SNACK, 4.00, new ArrayList<>());
         when(snack.getDescription()).thenReturn("Bacon Roll");
 
         Product coffee = mockCoffee(ProductGroup.BEVERAGE, 5.00, new ArrayList<>());

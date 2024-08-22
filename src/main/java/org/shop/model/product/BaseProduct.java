@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public  abstract class BaseProduct implements Product {
     protected final BigDecimal cost;
-    private List<BonusType> bonusTypes = new ArrayList<>();
+    private final List<BonusType> bonusTypes = new ArrayList<>();
 
     protected BaseProduct(double cost) {
         this.cost = BigDecimal.valueOf(cost);

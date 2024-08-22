@@ -9,8 +9,6 @@ import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 
-import org.shop.service.order.calculate.StampCardCostCalculationStrategy;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +36,7 @@ public class StampCardCostCalculationStrategyTest {
         // Setup
         Product coffee = mockProduct(ProductGroup.BEVERAGE, 3.00, new ArrayList<>());
         Product coffee1 = mockProduct(ProductGroup.BEVERAGE, 10.00, new ArrayList<>());
-        Product snak = mockProduct(ProductGroup.SNAK, 3.00, new ArrayList<>());
+        Product snak = mockProduct(ProductGroup.SNACK, 3.00, new ArrayList<>());
 
         List<Product> products = List.of(coffee, coffee1, snak);
         when(order.getProducts()).thenReturn(products);
@@ -62,7 +60,7 @@ public class StampCardCostCalculationStrategyTest {
         Product coffee3 = mockProduct(ProductGroup.BEVERAGE, 10.00, new ArrayList<>());
         Product coffee4 = mockProduct(ProductGroup.BEVERAGE, 10.00, new ArrayList<>());
         Product coffee5 = mockProduct(ProductGroup.BEVERAGE, 10.00, new ArrayList<>());
-        Product snak = mockProduct(ProductGroup.SNAK, 20.00, new ArrayList<>());
+        Product snak = mockProduct(ProductGroup.SNACK, 20.00, new ArrayList<>());
 
         List<Product> cardProducts = List.of(snak, coffee, coffee1, coffee2, coffee3, coffee4, coffee5);
         when(coffee.getBonusesApplied()).thenReturn(new ArrayList<>());

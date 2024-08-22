@@ -9,8 +9,6 @@ import org.shop.model.bonus.BonusType;
 import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
-import org.shop.model.product.beverage.Coffee;
-import org.shop.model.product.extra.Extra;
 import org.shop.service.order.calculate.NoStampCardCostCalculationStrategy;
 
 import java.math.BigDecimal;
@@ -36,7 +34,7 @@ public class NoStampCardCostCalculationStrategyTest {
     void testCalculateTotalCost_WithSnackAndBeverage_Then_OrderTotalAmount_Is_Not_Included_One_Extra_amount() {
         // Given
         Product coffee = mockProduct(ProductGroup.BEVERAGE, 3.00, new ArrayList<>());
-        Product snack = mockProduct(ProductGroup.SNAK, 2.00, new ArrayList<>());
+        Product snack = mockProduct(ProductGroup.SNACK, 2.00, new ArrayList<>());
         Product extra = mockProduct(ProductGroup.EXTRA, 1.00, new ArrayList<>());
 
         List<Product> products = List.of(coffee, snack, extra);
@@ -49,7 +47,7 @@ public class NoStampCardCostCalculationStrategyTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ProductGroup.class, names = {"BEVERAGE", "SNAK"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = ProductGroup.class, names = {"BEVERAGE", "SNACK"}, mode = EnumSource.Mode.INCLUDE)
     @DisplayName("When calculating the total cost with only beverages or snacks, the extra amount will be included in the total cost.")
     void testCalculateTotalCost_WithOnlyBeverages_Or_Snak_Then_Extra_Amount_Will_Be_Included_In_Total_Cost(ProductGroup productGroup) {
         // Given
@@ -64,7 +62,7 @@ public class NoStampCardCostCalculationStrategyTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ProductGroup.class, names = {"BEVERAGE", "SNAK"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = ProductGroup.class, names = {"BEVERAGE", "SNACK"}, mode = EnumSource.Mode.EXCLUDE)
     @DisplayName("When calculating the total cost with no snacks or beverages, the extra amount will not be included in the total cost.")
     void testCalculateTotalCost_NoSnackOrBeverage_Then_Extra_Amount_Will_Be_Included_In_Total_Cost(ProductGroup productGroup) {
         // Setup

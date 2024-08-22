@@ -1,6 +1,5 @@
 package org.shop.model.order;
 
-import org.shop.model.Currency;
 import org.shop.model.bonus.StampCard;
 import org.shop.model.product.Product;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
@@ -13,20 +12,16 @@ import java.util.Optional;
 
 public class Order {
     private final List<Product> products;
-    private final LocalDateTime dateTimeCreate = LocalDateTime.now();
+    private final StampCard stampCard;
+    private final LocalDateTime dateCreated = LocalDateTime.now();
 
-    private StampCard stampCard;
-    private Currency currency = Currency.CHF;
-
-    public Order(List<Product> products, StampCard stampCard, Currency currency) {
+    public  Order(List<Product> products, StampCard stampCard) {
         this.products = products;
         this.stampCard = stampCard;
         if (stampCard != null) {
             stampCard.addOrderedItems(products);
         }
-        this.currency = currency;
     }
-
 
     public BigDecimal getTotalCost(CalculateStrategyResolver calculateStrategyResolver) {
         var costCalculationStrategy = calculateStrategyResolver.resolve(this);
@@ -37,12 +32,8 @@ public class Order {
         return new ArrayList<>(products);
     }
 
-    public void addOrderItems(Product product) {
-        this.products.add(product);
-    }
-
-    public LocalDateTime getDateTimeCreate() {
-        return dateTimeCreate;
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
     }
 
     public Optional<StampCard> getStampCard() {

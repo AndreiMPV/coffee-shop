@@ -10,7 +10,7 @@ public class StampCard {
     private final String uuid = UUID.randomUUID().toString();
     private final String ownerFirstName;
     private final String ownerLastName;
-    private List<Product> stampCardProducts = new ArrayList<>();
+    private final List<Product> stampCardProducts = new ArrayList<>();
 
     public StampCard(String ownerFirstName, String ownerLastName) {
         this.ownerFirstName = ownerFirstName;
@@ -35,9 +35,5 @@ public class StampCard {
 
     public void addOrderedItems(List<Product> stampCardProducts) {
         this.stampCardProducts.addAll(stampCardProducts);
-    }
-
-    public void addOrderedItems(Product stampCardProduct) {
-        this.stampCardProducts.add(stampCardProduct);
     }
 }

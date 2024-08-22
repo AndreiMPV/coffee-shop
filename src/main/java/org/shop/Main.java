@@ -6,7 +6,7 @@ import org.shop.model.product.beverage.Coffee;
 import org.shop.model.product.beverage.OrangeFreshJuice;
 import org.shop.model.product.extra.ExtraMilk;
 import org.shop.model.product.extra.SpecialRoast;
-import org.shop.model.product.snak.BaconRoll;
+import org.shop.model.product.snack.BaconRoll;
 import org.shop.service.order.OrderService;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
 import org.shop.service.receipt.DefaultReceiptPrintService;

@@ -4,6 +4,6 @@ import org.shop.model.order.Order;
 
 import java.math.BigDecimal;
 
-public interface CostCalculationStrategy {
-    BigDecimal calculateTotalCost(Order order);
+public interface BonusApplyStrategy {
+    void applyBonus(Order order);
 }

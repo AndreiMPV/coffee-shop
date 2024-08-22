@@ -3,26 +3,31 @@ package org.shop.model.product;
 import org.shop.model.bonus.BonusType;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.RoundingMode;
 import java.util.Objects;
 
-public  abstract class BaseProduct implements Product {
-    protected final BigDecimal cost;
-    private List<BonusType> bonusTypes = new ArrayList<>();
+public class BaseProduct implements Product {
+    private final String productName;
+    private final ProductGroup productGroup;
+    private final BigDecimal initialCost;
 
-    protected BaseProduct(double cost) {
-        this.cost = BigDecimal.valueOf(cost);
+    private BonusType bonus;
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    public BaseProduct(String productName, BaseMainProduct.PortionSizeType portionSizeType,
+                           BaseMainProduct.PortionVolumeType portionVolumeType,
+                           double initialCost, ProductGroup productGroup) {
+        this.productName = productName;
+        this.productGroup = productGroup;
+        this.initialCost = BigDecimal.valueOf(initialCost);
     }
 
     @Override
     public BigDecimal getCost() {
+        if (getBonus() != null && getBonus().isCostApplicable()) {
+            return calculateDiscountedCost(this.cost, getBonus().getPercentage());
+        }
         return this.cost;
-    }
-
-    @Override
-    public List<BonusType> getBonusesApplied() {
-        return bonusTypes;
     }
 
     @Override
@@ -36,5 +41,21 @@ public  abstract class BaseProduct implements Product {
     @Override
     public int hashCode() {
         return Objects.hashCode(cost);
+    }
+
+    @Override
+    public BonusType getBonus() {
+        return bonus;
+    }
+
+    @Override
+    public void setBonus(BonusType bonus) {
+        this.bonus = bonus;
+    }
+
+    protected BigDecimal calculateDiscountedCost(BigDecimal cost, BigDecimal discountPercentage) {
+        BigDecimal discountAmount = cost.multiply(discountPercentage)
+                .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        return cost.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP);
     }
 }

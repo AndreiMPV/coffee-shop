@@ -27,9 +27,9 @@ public class CalculateStrategyResolverTest {
         var orderWithStampCard = mock(Order.class);
         when(orderWithStampCard.getStampCard()).thenReturn(Optional.of(stampCard));
         // When
-        CostCalculationStrategy strategy = resolver.resolve(orderWithStampCard);
+        BonusApplyStrategy strategy = resolver.resolve(orderWithStampCard);
         // Then
-        assertEquals(StampCardCostCalculationStrategy.class, strategy.getClass());
+        assertEquals(StampCardBonusApplyStrategy.class, strategy.getClass());
     }
 
     @Test
@@ -38,9 +38,9 @@ public class CalculateStrategyResolverTest {
         var orderWithoutStampCard = mock(Order.class);
         when(orderWithoutStampCard.getStampCard()).thenReturn(Optional.empty());
         // When
-        CostCalculationStrategy strategy = resolver.resolve(orderWithoutStampCard);
+        BonusApplyStrategy strategy = resolver.resolve(orderWithoutStampCard);
 
         // Then
-        assertEquals(NoStampCardCostCalculationStrategy.class, strategy.getClass());
+        assertEquals(NoStampCardBonusApplyStrategy.class, strategy.getClass());
     }
 }

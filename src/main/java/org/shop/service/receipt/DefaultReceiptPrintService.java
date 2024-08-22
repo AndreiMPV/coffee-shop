@@ -25,7 +25,7 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     }
 
     @Override
-    public String printOrder(Order order) {
+    public String printInvoice(Order order) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(buildBorder())
@@ -54,9 +54,9 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     }
 
     @Override
-    public void printOrder(Order order, OutputStream outputStream) {
+    public void printInvoice(Order order, OutputStream outputStream) {
         try {
-            outputStream.write(printOrder(order).getBytes(StandardCharsets.UTF_8));
+            outputStream.write(printInvoice(order).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException("Can't print receipt", e);
         }

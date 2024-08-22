@@ -8,7 +8,7 @@ import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
-import org.shop.service.order.calculate.CostCalculationStrategy;
+import org.shop.service.order.calculate.BonusApplyStrategy;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,10 +38,10 @@ public class OrderServiceTest {
         Order order = mock(Order.class);
 
         when(order.getTotalCost(any())).thenReturn(BigDecimal.valueOf(100.00));
-        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, new ArrayList<>());
+        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, BonusType.USED);
         List<Product> products = List.of(product);
         when(order.getProducts()).thenReturn(products);
-        var strategy = mock(CostCalculationStrategy.class);
+        var strategy = mock(BonusApplyStrategy.class);
         when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
         // When
         Order resultOrder = orderService.makeOrder(products, stampCard);
@@ -57,10 +57,10 @@ public class OrderServiceTest {
         Order order = mock(Order.class);
 
         when(order.getTotalCost(any())).thenReturn(BigDecimal.valueOf(100.00));
-        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, new ArrayList<>());
+        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, BonusType.USED);
         List<Product> products = List.of(product);
         when(order.getProducts()).thenReturn(products);
-        var strategy = mock(CostCalculationStrategy.class);
+        var strategy = mock(BonusApplyStrategy.class);
         when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
         // When
         Order resultOrder = orderService.makeOrder(products);
@@ -74,7 +74,7 @@ public class OrderServiceTest {
     void orderShouldCalculateTotalAmount() {
         // Given
         Order order = mock(Order.class);
-        var strategy = mock(CostCalculationStrategy.class);
+        var strategy = mock(BonusApplyStrategy.class);
         when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
         when(orderService.calculateTotal(order)).thenReturn(BigDecimal.valueOf(150.00));
         // When
@@ -84,11 +84,11 @@ public class OrderServiceTest {
         verify(order).getTotalCost(calculateStrategyResolver);
     }
 
-    private Product mockProduct(ProductGroup productGroup, double cost, List<BonusType> bonusTypes) {
+    private Product mockProduct(ProductGroup productGroup, double cost, BonusType bonusType) {
         Product product = mock(Product.class);
         when(product.getGroup()).thenReturn(productGroup);
         when(product.getCost()).thenReturn(BigDecimal.valueOf(cost));
-        when(product.getBonusesApplied()).thenReturn(bonusTypes);
+        when(product.getBonus()).thenReturn(bonusType);
         return product;
     }
 }

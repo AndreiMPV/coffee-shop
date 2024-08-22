@@ -1,16 +1,12 @@
 package org.shop.model.product.extra;
 
-import org.shop.model.product.Product;
+import org.shop.model.product.BaseExtraProduct;
 
-public class SpecialRoast extends Extra {
-    private static final String NAME = "Special roast";
-
-    public SpecialRoast(Product product, double cost) {
-        super(product, cost);
-    }
+public class SpecialRoast extends BaseExtraProduct {
+    public static final String NAME = "Special roast";
 
     @Override
     public String getDescription() {
-        return product.getDescription() + " with " + NAME.toLowerCase();
+        return NAME.toLowerCase();
     }
 }

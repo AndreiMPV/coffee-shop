@@ -4,7 +4,7 @@ import org.shop.model.order.Order;
 
 public class CalculateStrategyResolver {
 
-    public CostCalculationStrategy resolve(Order order) {
-        return order.getStampCard().isPresent() ? new StampCardCostCalculationStrategy() : new NoStampCardCostCalculationStrategy();
+    public BonusApplyStrategy resolve(Order order) {
+        return order.getStampCard().isPresent() ? new StampCardBonusApplyStrategy() : new NoStampCardBonusApplyStrategy();
     }
 }

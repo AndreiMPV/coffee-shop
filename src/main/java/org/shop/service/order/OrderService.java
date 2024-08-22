@@ -1,6 +1,5 @@
 package org.shop.service.order;
 
-import org.shop.model.Currency;
 import org.shop.model.bonus.StampCard;
 import org.shop.model.order.Order;
 import org.shop.model.product.Product;
@@ -17,20 +16,18 @@ public class OrderService {
     }
 
     public Order makeOrder(List<Product> products, StampCard stampCard) {
-        Order order = convert(products, stampCard);
-        return order;
+        return convert(products, stampCard);
     }
 
     public Order makeOrder(List<Product> products) {
-        Order order = convert(products, null);
-        return order;
+        return convert(products, null);
     }
 
     public BigDecimal calculateTotal(Order order) {
         return order.getTotalCost(calculateStrategyResolver);
     }
     private Order convert(List<Product> products, StampCard stampCard) {
-        return new Order(products, stampCard, Currency.CHF);
+        return new Order(products, stampCard);
     }
 
 }

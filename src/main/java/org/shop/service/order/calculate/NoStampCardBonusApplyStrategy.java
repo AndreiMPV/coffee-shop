@@ -4,32 +4,29 @@ import org.shop.model.bonus.BonusType;
 import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
-import org.shop.model.product.extra.Extra;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class NoStampCardCostCalculationStrategy implements CostCalculationStrategy {
+public class NoStampCardBonusApplyStrategy implements BonusApplyStrategy {
 
     @Override
-    public BigDecimal calculateTotalCost(Order order) {
+    public void applyBonus(Order order) {
         List<Product> products = order.getProducts();
         Map<ProductGroup, List<Product>> groupedProducts = products.stream()
+                .filter(product -> Objects.nonNull(product.getGroup()))
                 .collect(Collectors.groupingBy(Product::getGroup));
 
-        boolean hasSnack = groupedProducts.containsKey(ProductGroup.SNAK);
+        boolean hasSnack = groupedProducts.containsKey(ProductGroup.SNACK);
         boolean hasBeverage = groupedProducts.containsKey(ProductGroup.BEVERAGE);
 
         if (hasSnack && hasBeverage) {
             products.stream()
                     .filter(product -> ProductGroup.EXTRA == product.getGroup())
-                    .findAny().ifPresent(extra -> extra.getBonusesApplied().add(BonusType.FREE));
+                    .findAny().ifPresent(extra -> extra.setBonus(BonusType.FREE));
         }
-        return products.stream()
-                .filter(product -> !product.getBonusesApplied().contains(BonusType.FREE))
-                .map(Product::getCost)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

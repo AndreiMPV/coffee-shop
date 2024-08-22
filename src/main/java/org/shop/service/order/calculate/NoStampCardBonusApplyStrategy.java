@@ -6,13 +6,15 @@ import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * The {@code NoStampCardBonusApplyStrategy} class implements the {@link BonusApplyStrategy} interface
+ * and provides the strategy for applying bonuses when no stamp card is present.
+ */
 public class NoStampCardBonusApplyStrategy implements BonusApplyStrategy {
 
     @Override

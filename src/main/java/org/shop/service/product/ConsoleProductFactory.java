@@ -3,7 +3,6 @@ package org.shop.service.product;
 import org.shop.model.product.ExtraProduct;
 import org.shop.model.product.MainProduct;
 import org.shop.model.product.MainProduct.PortionSizeType;
-import org.shop.model.product.Product;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +16,16 @@ import static org.shop.model.product.MainProduct.PortionSizeType.*;
 import static org.shop.model.product.MainProduct.PortionVolumeType.L_0_25;
 import static org.shop.model.product.ProductGroup.*;
 
+
+/**
+ * The {@code ConsoleProductFactory} class is responsible for creating products
+ * based on input strings. It provides functionality to parse product descriptions,
+ * build product keys, and produce product objects with optional extra products.
+ * <p>
+ * The class maintains mappings for base products and extra products and utilizes these mappings
+ * to create instances of {@link MainProduct} with associated extras based on user input.
+ * </p>
+ */
 public class ConsoleProductFactory {
     public static final int BASE_PRODUCT_INDEX = 0;
     public static final String EXTRA_DELIMITER = "with";
@@ -36,18 +45,16 @@ public class ConsoleProductFactory {
             new ExtraProduct("Special roast", 0.95)
             ).collect(Collectors.groupingBy(ConsoleProductFactory::buildExtraProductKey));
 
-
-
-    public static String buildBaseProductKey(MainProduct mainProduct) {
-        return normalizedName(Optional.ofNullable(mainProduct.getPortionSizeType())
-                                        .map(PortionSizeType::name).orElse("") +
-                                        mainProduct.getProductName());
-    }
-
-    public static String buildExtraProductKey(ExtraProduct baseMainProduct) {
-        return normalizedName(baseMainProduct.getProductName());
-    }
-
+    /**
+     * Produces a list of {@link MainProduct} instances based on the input string describing products and extras.
+     * <p>
+     * The input string is split into product descriptions, and each product is processed to create an instance
+     * of {@link MainProduct} with any associated extras.
+     * </p>
+     *
+     * @param productListInput a string describing products and optional extras
+     * @return a list of {@link MainProduct} created from the input string
+     */
     public static List<MainProduct> produceProduct(String productListInput) {
         String[] allProducts = productListInput.split(",");
         return Arrays.stream(allProducts)
@@ -68,13 +75,13 @@ public class ConsoleProductFactory {
                 .stream()
                 .findFirst();
                 if (baseMainProductOpt.isPresent()) {
-                    MainProduct mainProduct = baseMainProductOpt.get().clone();
+                    MainProduct mainProduct = baseMainProductOpt.get().deepCopy();
                     extraDescriptions.forEach(extraDesc ->
                             Optional.ofNullable(EXTRA_PRODUCT_MAP.get(normalizedName(extraDesc)))
                                     .orElse(Collections.emptyList())
                                     .stream()
                                     .findFirst()
-                                    .ifPresent(mainProduct::addExtraProduct)
+                                    .ifPresent(extra -> mainProduct.addExtraProduct(extra.deepCopy()))
                         );
                     return Optional.ofNullable(mainProduct);
                 } else {
@@ -83,6 +90,15 @@ public class ConsoleProductFactory {
         return Optional.empty();
     }
 
+    private static String buildBaseProductKey(MainProduct mainProduct) {
+        return normalizedName(Optional.ofNullable(mainProduct.getPortionSizeType())
+                .map(PortionSizeType::name).orElse("") +
+                mainProduct.getProductName());
+    }
+
+    private static String buildExtraProductKey(ExtraProduct baseMainProduct) {
+        return normalizedName(baseMainProduct.getProductName());
+    }
 
     private static List<String> extractExtras(String[] fullProductDesc) {
         return Arrays.stream(fullProductDesc).skip(1).toList();

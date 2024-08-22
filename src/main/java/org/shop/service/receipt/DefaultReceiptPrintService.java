@@ -3,7 +3,6 @@ package org.shop.service.receipt;
 import org.shop.model.order.Order;
 import org.shop.model.product.ExtraProduct;
 import org.shop.model.product.MainProduct;
-import org.shop.model.product.Product;
 import org.shop.service.order.OrderService;
 
 import java.io.IOException;
@@ -13,6 +12,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+/**
+ * The {@code DefaultReceiptPrintService} class implements the {@link ReceiptPrintService} interface
+ * and provides functionality for generating and printing receipts.
+ * <p>
+ * This implementation formats receipts with a structured layout, including product descriptions,
+ * quantities, costs, and total amounts. The receipt can be printed to a {@link OutputStream} or
+ * returned as a formatted string.
+ * </p>
+ */
 public class DefaultReceiptPrintService implements ReceiptPrintService {
     private static final int DESCRIPTION_AMOUNT_LINE_LENGTH = 50;
     private static final int DESCRIPTION_LENGTH = 40;
@@ -21,24 +30,27 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     private static final String TOTAL_SEPARATOR = "-".repeat(DESCRIPTION_AMOUNT_LINE_LENGTH);
     private static final String BOARDER = "-".repeat(DESCRIPTION_AMOUNT_LINE_LENGTH);
 
-    private final OrderService orderService;
-
-
-    public DefaultReceiptPrintService(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
+    /**
+     * Generates a formatted receipt as a string for the given {@link Order}.
+     * <p>
+     * The receipt includes the shop name, a list of products with quantities and costs,
+     * any discounts, and the total cost. The receipt is formatted with borders and centered text.
+     * </p>
+     *
+     * @param order the {@link Order} to print
+     * @return a formatted receipt string
+     */
     @Override
     public String printReceipt(Order order) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(buildBorder())
+        sb.append(BOARDER)
                 .append(System.lineSeparator())
                 .append(centerText("_Receipt_"))
                 .append(System.lineSeparator())
                 .append(centerText("_Coffee_Shop_"))
                 .append(System.lineSeparator())
-                .append(buildBorder())
+                .append(BOARDER)
                 .append(System.lineSeparator());
 
         addProductLines(order, sb);
@@ -47,11 +59,11 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
                 .append(System.lineSeparator())
                 .append(formatTotal(order.getTotalCost()))
                 .append(System.lineSeparator())
-                .append(buildBorder())
+                .append(BOARDER)
                 .append(System.lineSeparator())
                 .append(centerText("_Contact:+48999922233_"))
                 .append(System.lineSeparator())
-                .append(buildBorder())
+                .append(BOARDER)
                 .append(System.lineSeparator());
 
         return sb.toString();
@@ -64,10 +76,6 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
         } catch (IOException e) {
             throw new RuntimeException("Can't print receipt", e);
         }
-    }
-
-    private String buildBorder() {
-        return BOARDER;
     }
 
     private String rightFixedLengthString(String string) {

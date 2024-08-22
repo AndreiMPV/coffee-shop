@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public enum BonusType {
     FREE(100), USED(0);
 
-    BigDecimal percentage;
+    final BigDecimal percentage;
     boolean costApplicable;
 
     BonusType(int percentage) {

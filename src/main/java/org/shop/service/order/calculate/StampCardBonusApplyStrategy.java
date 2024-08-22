@@ -5,11 +5,14 @@ import org.shop.model.order.Order;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.IntStream;
 
+
+/**
+ * The {@code StampCardBonusApplyStrategy} class implements the {@link BonusApplyStrategy} interface
+ * and provides the specific strategy for applying bonuses when a stamp card is present.
+ */
 public class StampCardBonusApplyStrategy implements BonusApplyStrategy {
 
     @Override

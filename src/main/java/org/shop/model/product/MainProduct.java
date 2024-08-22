@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+
+/**
+ * Represents a main product in a coffee shop, which may include additional extra products
+ * as part of its offering. This class implements the {@link Product} interface, providing
+ * concrete behavior for handling the product's name, group, initial cost, bonuses, and discounts.
+ */
 public class MainProduct implements Product {
     private final List<ExtraProduct> extraProducts = new ArrayList<>();
     private final String productName;
@@ -32,11 +38,6 @@ public class MainProduct implements Product {
     @Override
     public ProductGroup getProductGroup() {
         return productGroup;
-    }
-
-
-    public PortionVolumeType getPortionVolumeType() {
-        return portionVolumeType;
     }
 
     @Override
@@ -75,13 +76,17 @@ public class MainProduct implements Product {
         return extraCost.add(initialCost);
     }
 
+    @Override
+    public String getProductName() {
+        return productName;
+    }
 
     public PortionSizeType getPortionSizeType() {
         return portionSizeType;
     }
 
-    public String getProductName() {
-        return productName;
+    public PortionVolumeType getPortionVolumeType() {
+        return portionVolumeType;
     }
 
     public void addExtraProduct(ExtraProduct extraProduct) {
@@ -126,7 +131,7 @@ public class MainProduct implements Product {
         }
     }
 
-    public MainProduct clone() {
+    public MainProduct deepCopy() {
         return new MainProduct(this.productName, this.productGroup, this.portionSizeType,
                 this.portionVolumeType, this.initialCost.toBigInteger().doubleValue());
     }

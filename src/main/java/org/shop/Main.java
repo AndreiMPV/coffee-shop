@@ -2,7 +2,6 @@ package org.shop;
 
 import org.shop.model.order.Order;
 import org.shop.model.product.MainProduct;
-import org.shop.model.product.Product;
 import org.shop.service.order.OrderService;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
 import org.shop.service.product.ConsoleProductFactory;
@@ -21,10 +20,9 @@ public class Main {
         scanner.close();
 
 
-
         CalculateStrategyResolver calculateStrategyResolver = new CalculateStrategyResolver();
         OrderService orderService = new OrderService(calculateStrategyResolver);
-        ReceiptPrintService defaultReceiptPrintService = new DefaultReceiptPrintService(orderService);
+        ReceiptPrintService defaultReceiptPrintService = new DefaultReceiptPrintService();
 
         List<MainProduct> products = ConsoleProductFactory.produceProduct(input);
         Order order = orderService.makeOrder(products);

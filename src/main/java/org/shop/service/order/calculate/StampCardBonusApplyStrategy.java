@@ -6,6 +6,7 @@ import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -14,7 +15,7 @@ public class StampCardBonusApplyStrategy implements BonusApplyStrategy {
     @Override
     public void applyBonus(Order order) {
         List<Product> canDiscountedBeverages = order.getStampCard().get().getCardProducts().stream()
-                .filter(product -> ProductGroup.BEVERAGE == product.getGroup())
+                .filter(product -> ProductGroup.BEVERAGE == product.getProductGroup())
                 .filter(product -> product.getBonus() != null && product.getBonus().isCostApplicable())
                 .toList();
 
@@ -24,10 +25,22 @@ public class StampCardBonusApplyStrategy implements BonusApplyStrategy {
                         Product product = canDiscountedBeverages.get(i);
                         if (i % 5 == 0) {
                             product.setBonus(BonusType.FREE);
+                            product.setDiscountAmount(calculateDiscountAmount(product));
                         } else {
                             product.setBonus(BonusType.USED);
                         }
                     });
+        }
+    }
+
+    public BigDecimal calculateDiscountAmount(Product product) {
+        if (product.getBonus() != null && product.getBonus().isCostApplicable()) {
+            BigDecimal discountPercentage = product.getBonus().getPercentage();
+            return product.getInitialCost().multiply(discountPercentage)
+                    .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+                    .setScale(2, RoundingMode.HALF_UP);
+        } else {
+            return BigDecimal.ZERO;
         }
     }
 }

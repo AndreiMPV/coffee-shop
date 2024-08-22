@@ -1,18 +1,22 @@
 package org.shop.service.receipt;
 
 import org.shop.model.order.Order;
+import org.shop.model.product.BaseExtraProduct;
+import org.shop.model.product.BaseMainProduct;
+import org.shop.model.product.Product;
 import org.shop.service.order.OrderService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DefaultReceiptPrintService implements ReceiptPrintService {
     private static final int DESCRIPTION_AMOUNT_LINE_LENGTH = 50;
     private static final int DESCRIPTION_LENGTH = 40;
-    private static final int TOTAL_LENGTH = 10;
+    private static final int TOTAL_LENGTH = 14;
 
     private static final String TOTAL_SEPARATOR = "-".repeat(DESCRIPTION_AMOUNT_LINE_LENGTH);
     private static final String BOARDER = "-".repeat(DESCRIPTION_AMOUNT_LINE_LENGTH);
@@ -25,7 +29,7 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     }
 
     @Override
-    public String printOrder(Order order) {
+    public String printReceipt(Order order) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(buildBorder())
@@ -41,7 +45,7 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
 
         sb.append(TOTAL_SEPARATOR)
                 .append(System.lineSeparator())
-                .append(formatTotal(orderService.calculateTotal(order)))
+                .append(formatTotal(order.getTotalCost()))
                 .append(System.lineSeparator())
                 .append(buildBorder())
                 .append(System.lineSeparator())
@@ -54,9 +58,9 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     }
 
     @Override
-    public void printOrder(Order order, OutputStream outputStream) {
+    public void printReceipt(Order order, OutputStream outputStream) {
         try {
-            outputStream.write(printOrder(order).getBytes(StandardCharsets.UTF_8));
+            outputStream.write(printReceipt(order).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException("Can't print receipt", e);
         }
@@ -67,15 +71,19 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
     }
 
     private String rightFixedLengthString(String string) {
-        return String.format("%1$"+ 8 + "s", string);
+        return String.format("%1$" + 8 + "s", string);
     }
 
     private String leftFixedLengthString(String string) {
         return String.format("%-" + DESCRIPTION_LENGTH + "s", string);
     }
 
+    private String formatDiscount(BigDecimal amount) {
+        return String.format("%-" + (DESCRIPTION_AMOUNT_LINE_LENGTH - 10) + "s%10.2f","", amount);
+    }
+
     private String formatTotal(BigDecimal amount) {
-        return String.format("%-" + (DESCRIPTION_AMOUNT_LINE_LENGTH - TOTAL_LENGTH) + "s%10.2f", "Total: ", amount);
+        return String.format("%-" + (DESCRIPTION_AMOUNT_LINE_LENGTH - TOTAL_LENGTH) + "s%10.2f %s", "Total: ", amount, "CHF");
     }
 
     private String centerText(String text) {
@@ -89,10 +97,28 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
                 .collect(Collectors.groupingBy(product -> product, Collectors.counting()))
                 .forEach((product, count) -> {
                     sb.append(" ")
-                            .append(leftFixedLengthString(count + " x " + product.getDescription()))
-                            .append(" ")
-                            .append(rightFixedLengthString(product.getCost().multiply(BigDecimal.valueOf(count)).toString()))
-                            .append(System.lineSeparator());
+                       .append(leftFixedLengthString(count + " x " + buildProductDescription(product)))
+                       .append(" ")
+                       .append(rightFixedLengthString(product.getInitialTotalCost().multiply(BigDecimal.valueOf(count)).toString()));
+                    if (product.getTotalDiscount().compareTo(BigDecimal.ZERO) > 0) {
+                        sb.append(System.lineSeparator())
+                           .append(formatDiscount(product.getTotalDiscount().multiply(BigDecimal.valueOf(count)).negate()));
+                    }
+                    sb.append(System.lineSeparator());
                 });
+    }
+
+    public String buildProductDescription(Product product) {
+        return Optional.ofNullable(product.getPortionSizeType())
+                        .map(BaseMainProduct.PortionSizeType::name)
+                        .map(String::toLowerCase)
+                        .map(name -> name + " ")
+                        .orElse("") +
+                    product.getProductName().toLowerCase() + " " +
+                Optional.ofNullable(product.getPortionVolumeType())
+                        .map(BaseMainProduct.PortionVolumeType::name)
+                        .map(String::toLowerCase).orElse("") +
+                product.getExtraProducts().stream().map(BaseExtraProduct::getProductName)
+                        .collect(Collectors.joining(" with "));
     }
 }

@@ -23,9 +23,10 @@ public class Order {
         }
     }
 
-    public BigDecimal getTotalCost(CalculateStrategyResolver calculateStrategyResolver) {
-        var costCalculationStrategy = calculateStrategyResolver.resolve(this);
-        return costCalculationStrategy.calculateTotalCost(this);
+    public BigDecimal getTotalCost() {
+        return products.stream()
+                .map( product -> product.getInitialTotalCost().subtract(product.getTotalDiscount()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public List<Product> getProducts() {

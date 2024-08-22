@@ -4,8 +4,9 @@ package org.shop.model.product;
 import org.shop.model.bonus.BonusType;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public class BaseExtraProduct {
+public class BaseExtraProduct implements Product{
     private final String productName;
     private final ProductGroup productGroup;
     private final BigDecimal initialCost;
@@ -25,6 +26,16 @@ public class BaseExtraProduct {
 
     public ProductGroup getProductGroup() {
         return productGroup;
+    }
+
+    @Override
+    public BaseMainProduct.PortionSizeType getPortionSizeType() {
+        return null;
+    }
+
+    @Override
+    public BaseMainProduct.PortionVolumeType getPortionVolumeType() {
+        return null;
     }
 
     public BigDecimal getInitialCost() {
@@ -49,5 +60,24 @@ public class BaseExtraProduct {
 
     public ProductGroup getGroup() {
         return ProductGroup.EXTRA;
+    }
+
+    public BaseExtraProduct clone() {
+        return new BaseExtraProduct(this.productName, this.initialCost.toBigInteger().doubleValue());
+    }
+
+    @Override
+    public BigDecimal getInitialTotalCost() {
+        return initialCost;
+    }
+
+    @Override
+    public BigDecimal getTotalDiscount() {
+        return discountAmount;
+    }
+
+    @Override
+    public List<BaseExtraProduct> getExtraProducts() {
+        return List.of();
     }
 }

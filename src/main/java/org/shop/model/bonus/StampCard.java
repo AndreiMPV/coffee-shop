@@ -1,5 +1,6 @@
 package org.shop.model.bonus;
 
+import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class StampCard {
         return stampCardProducts;
     }
 
-    public void addOrderedItems(List<Product> stampCardProducts) {
+    public void addOrderedProducts(List<MainProduct> stampCardProducts) {
         this.stampCardProducts.addAll(stampCardProducts);
     }
 }

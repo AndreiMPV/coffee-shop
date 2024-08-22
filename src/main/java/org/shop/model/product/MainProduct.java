@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class BaseMainProduct implements Product {
-    private final List<BaseExtraProduct> extraProducts = new ArrayList<>();
+public class MainProduct implements Product {
+    private final List<ExtraProduct> extraProducts = new ArrayList<>();
     private final String productName;
     private final ProductGroup productGroup;
     private final PortionSizeType portionSizeType;
@@ -19,9 +19,9 @@ public class BaseMainProduct implements Product {
     private BonusType bonus;
     private BigDecimal discountAmount = BigDecimal.ZERO;
 
-    public BaseMainProduct(String productName, ProductGroup productGroup,
-                           PortionSizeType portionSizeType, PortionVolumeType portionVolumeType,
-                           double initialCost) {
+    public MainProduct(String productName, ProductGroup productGroup,
+                       PortionSizeType portionSizeType, PortionVolumeType portionVolumeType,
+                       double initialCost) {
         this.productName = productName;
         this.productGroup = productGroup;
         this.initialCost = BigDecimal.valueOf(initialCost);
@@ -34,7 +34,7 @@ public class BaseMainProduct implements Product {
         return productGroup;
     }
 
-    @Override
+
     public PortionVolumeType getPortionVolumeType() {
         return portionVolumeType;
     }
@@ -55,11 +55,6 @@ public class BaseMainProduct implements Product {
     }
 
     @Override
-    public BigDecimal getDiscountAmount() {
-        return discountAmount;
-    }
-
-    @Override
     public void setDiscountAmount(BigDecimal discountAmount) {
         this.discountAmount = discountAmount;
     }
@@ -67,7 +62,7 @@ public class BaseMainProduct implements Product {
     @Override
     public BigDecimal getTotalDiscount() {
         BigDecimal extraDiscount = extraProducts.stream()
-                .map(BaseExtraProduct::getTotalDiscount)
+                .map(ExtraProduct::getTotalDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return extraDiscount.add(discountAmount);
     }
@@ -75,12 +70,12 @@ public class BaseMainProduct implements Product {
     @Override
     public BigDecimal getInitialTotalCost() {
         BigDecimal extraCost = extraProducts.stream()
-                    .map(BaseExtraProduct::getInitialTotalCost)
+                    .map(ExtraProduct::getInitialTotalCost)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
         return extraCost.add(initialCost);
     }
 
-    @Override
+
     public PortionSizeType getPortionSizeType() {
         return portionSizeType;
     }
@@ -89,11 +84,11 @@ public class BaseMainProduct implements Product {
         return productName;
     }
 
-    public void addExtraProduct(BaseExtraProduct extraProduct) {
+    public void addExtraProduct(ExtraProduct extraProduct) {
         extraProducts.add(extraProduct);
     }
 
-    public List<BaseExtraProduct> getExtraProducts() {
+    public List<ExtraProduct> getExtraProducts() {
         return extraProducts;
     }
 
@@ -105,7 +100,7 @@ public class BaseMainProduct implements Product {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        BaseMainProduct that = (BaseMainProduct) object;
+        MainProduct that = (MainProduct) object;
         return Objects.equals(extraProducts, that.extraProducts) && Objects.equals(productName, that.productName) && productGroup == that.productGroup && portionSizeType == that.portionSizeType && portionVolumeType == that.portionVolumeType && Objects.equals(initialCost, that.initialCost) && bonus == that.bonus && Objects.equals(discountAmount, that.discountAmount);
     }
 
@@ -131,8 +126,8 @@ public class BaseMainProduct implements Product {
         }
     }
 
-    public BaseMainProduct clone() {
-        return new BaseMainProduct(this.productName, this.productGroup, this.portionSizeType,
+    public MainProduct clone() {
+        return new MainProduct(this.productName, this.productGroup, this.portionSizeType,
                 this.portionVolumeType, this.initialCost.toBigInteger().doubleValue());
     }
 }

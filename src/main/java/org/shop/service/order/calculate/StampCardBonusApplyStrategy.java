@@ -32,15 +32,4 @@ public class StampCardBonusApplyStrategy implements BonusApplyStrategy {
                     });
         }
     }
-
-    public BigDecimal calculateDiscountAmount(Product product) {
-        if (product.getBonus() != null && product.getBonus().isCostApplicable()) {
-            BigDecimal discountPercentage = product.getBonus().getPercentage();
-            return product.getInitialCost().multiply(discountPercentage)
-                    .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-                    .setScale(2, RoundingMode.HALF_UP);
-        } else {
-            return BigDecimal.ZERO;
-        }
-    }
 }

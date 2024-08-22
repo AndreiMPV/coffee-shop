@@ -1,8 +1,8 @@
 package org.shop.service.receipt;
 
 import org.shop.model.order.Order;
-import org.shop.model.product.BaseExtraProduct;
-import org.shop.model.product.BaseMainProduct;
+import org.shop.model.product.ExtraProduct;
+import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 import org.shop.service.order.OrderService;
 
@@ -108,17 +108,17 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
                 });
     }
 
-    public String buildProductDescription(Product product) {
+    public String buildProductDescription(MainProduct product) {
         return Optional.ofNullable(product.getPortionSizeType())
-                        .map(BaseMainProduct.PortionSizeType::name)
+                        .map(MainProduct.PortionSizeType::name)
                         .map(String::toLowerCase)
                         .map(name -> name + " ")
                         .orElse("") +
                     product.getProductName().toLowerCase() + " " +
                 Optional.ofNullable(product.getPortionVolumeType())
-                        .map(BaseMainProduct.PortionVolumeType::name)
+                        .map(MainProduct.PortionVolumeType::name)
                         .map(String::toLowerCase).orElse("") +
-                product.getExtraProducts().stream().map(BaseExtraProduct::getProductName)
+                product.getExtraProducts().stream().map(ExtraProduct::getProductName)
                         .collect(Collectors.joining(" with "));
     }
 }

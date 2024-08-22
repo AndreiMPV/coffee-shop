@@ -1,8 +1,8 @@
 package org.shop.service.product;
 
-import org.shop.model.product.BaseExtraProduct;
-import org.shop.model.product.BaseMainProduct;
-import org.shop.model.product.BaseMainProduct.PortionSizeType;
+import org.shop.model.product.ExtraProduct;
+import org.shop.model.product.MainProduct;
+import org.shop.model.product.MainProduct.PortionSizeType;
 import org.shop.model.product.Product;
 
 import java.util.Arrays;
@@ -13,42 +13,42 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.shop.model.product.BaseMainProduct.PortionSizeType.*;
-import static org.shop.model.product.BaseMainProduct.PortionVolumeType.L_0_25;
+import static org.shop.model.product.MainProduct.PortionSizeType.*;
+import static org.shop.model.product.MainProduct.PortionVolumeType.L_0_25;
 import static org.shop.model.product.ProductGroup.*;
 
 public class ConsoleProductFactory {
     public static final int BASE_PRODUCT_INDEX = 0;
     public static final String EXTRA_DELIMITER = "with";
 
-    private static final Map<String, List<BaseMainProduct>> BASE_PRODUCT_MAP = Stream.of(
-            new BaseMainProduct("Coffee", BEVERAGE, LARGE, null, 3.55),
-            new BaseMainProduct("Coffee", BEVERAGE, MEDIUM, null, 3.05),
-            new BaseMainProduct("Coffee", BEVERAGE, SMALL, null, 88),
-            new BaseMainProduct("Bacon Roll", SNACK, null, null, 4.53),
-            new BaseMainProduct("Orange juice", BEVERAGE, null, L_0_25, 3.95),
-            new BaseMainProduct("Freshly squeezed orange juice", BEVERAGE, null, L_0_25, 3.95)
+    private static final Map<String, List<MainProduct>> BASE_PRODUCT_MAP = Stream.of(
+            new MainProduct("Coffee", BEVERAGE, LARGE, null, 3.55),
+            new MainProduct("Coffee", BEVERAGE, MEDIUM, null, 3.05),
+            new MainProduct("Coffee", BEVERAGE, SMALL, null, 88),
+            new MainProduct("Bacon Roll", SNACK, null, null, 4.53),
+            new MainProduct("Orange juice", BEVERAGE, null, L_0_25, 3.95),
+            new MainProduct("Freshly squeezed orange juice", BEVERAGE, null, L_0_25, 3.95)
             ).collect(Collectors.groupingBy(ConsoleProductFactory::buildBaseProductKey));
 
-    private static final Map<String, List<BaseExtraProduct>> EXTRA_PRODUCT_MAP = Stream.of(
-            new BaseExtraProduct("Extra milk", 0.32),
-            new BaseExtraProduct("Foamed milk", 0.51),
-            new BaseExtraProduct("Special roast", 0.95)
+    private static final Map<String, List<ExtraProduct>> EXTRA_PRODUCT_MAP = Stream.of(
+            new ExtraProduct("Extra milk", 0.32),
+            new ExtraProduct("Foamed milk", 0.51),
+            new ExtraProduct("Special roast", 0.95)
             ).collect(Collectors.groupingBy(ConsoleProductFactory::buildExtraProductKey));
 
 
 
-    public static String buildBaseProductKey(BaseMainProduct baseMainProduct) {
-        return normalizedName(Optional.ofNullable(baseMainProduct.getPortionSizeType())
+    public static String buildBaseProductKey(MainProduct mainProduct) {
+        return normalizedName(Optional.ofNullable(mainProduct.getPortionSizeType())
                                         .map(PortionSizeType::name).orElse("") +
-                                        baseMainProduct.getProductName());
+                                        mainProduct.getProductName());
     }
 
-    public static String buildExtraProductKey(BaseExtraProduct baseMainProduct) {
+    public static String buildExtraProductKey(ExtraProduct baseMainProduct) {
         return normalizedName(baseMainProduct.getProductName());
     }
 
-    public static List<Product> produceProduct(String productListInput) {
+    public static List<MainProduct> produceProduct(String productListInput) {
         String[] allProducts = productListInput.split(",");
         return Arrays.stream(allProducts)
                 .map(product -> {
@@ -62,21 +62,21 @@ public class ConsoleProductFactory {
                 .toList();
     }
 
-    private static Optional<Product> createProduct(String baseProductDescription, List<String> extraDescriptions) {
-        Optional<BaseMainProduct> baseMainProductOpt = Optional.ofNullable(BASE_PRODUCT_MAP.get(normalizedName(baseProductDescription)))
+    private static Optional<MainProduct> createProduct(String baseProductDescription, List<String> extraDescriptions) {
+        Optional<MainProduct> baseMainProductOpt = Optional.ofNullable(BASE_PRODUCT_MAP.get(normalizedName(baseProductDescription)))
                 .orElse(Collections.emptyList())
                 .stream()
                 .findFirst();
                 if (baseMainProductOpt.isPresent()) {
-                    BaseMainProduct baseMainProduct = baseMainProductOpt.get().clone();
+                    MainProduct mainProduct = baseMainProductOpt.get().clone();
                     extraDescriptions.forEach(extraDesc ->
                             Optional.ofNullable(EXTRA_PRODUCT_MAP.get(normalizedName(extraDesc)))
                                     .orElse(Collections.emptyList())
                                     .stream()
                                     .findFirst()
-                                    .ifPresent(baseMainProduct::addExtraProduct)
+                                    .ifPresent(mainProduct::addExtraProduct)
                         );
-                    return Optional.ofNullable(baseMainProduct);
+                    return Optional.ofNullable(mainProduct);
                 } else {
                     System.out.println("Can't create product : " + baseProductDescription);
                 }

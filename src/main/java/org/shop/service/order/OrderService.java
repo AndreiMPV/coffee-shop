@@ -2,6 +2,7 @@ package org.shop.service.order;
 
 import org.shop.model.bonus.StampCard;
 import org.shop.model.order.Order;
+import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
 
@@ -15,13 +16,13 @@ public class OrderService {
         this.calculateStrategyResolver = calculateStrategyResolver;
     }
 
-    public Order makeOrder(List<Product> products, StampCard stampCard) {
+    public Order makeOrder(List<MainProduct> products, StampCard stampCard) {
         Order order = convert(products, stampCard);
         applyBonuses(order);
         return order;
     }
 
-    public Order makeOrder(List<Product> products) {
+    public Order makeOrder(List<MainProduct> products) {
         Order order = convert(products, null);
         applyBonuses(order);
         return order;
@@ -32,7 +33,7 @@ public class OrderService {
         costCalculationStrategy.applyBonus(order);
     }
 
-    private Order convert(List<Product> products, StampCard stampCard) {
+    private Order convert(List<MainProduct> products, StampCard stampCard) {
         return new Order(products, stampCard);
     }
 

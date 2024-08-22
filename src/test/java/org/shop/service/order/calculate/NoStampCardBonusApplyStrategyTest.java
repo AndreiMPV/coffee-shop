@@ -87,8 +87,8 @@ public class NoStampCardBonusApplyStrategyTest {
 
     private Product mockProduct(ProductGroup productGroup, double cost, List<BonusType> bonusTypes) {
         Product product = mock(Product.class);
-        when(product.getGroup()).thenReturn(productGroup);
-        when(product.getCost()).thenReturn(BigDecimal.valueOf(cost));
+//        when(product.getGroup()).thenReturn(productGroup);
+//        when(product.getCost()).thenReturn(BigDecimal.valueOf(cost));
     //    when(product.getBonus()).thenReturn(bonusTypes);
         return product;
     }

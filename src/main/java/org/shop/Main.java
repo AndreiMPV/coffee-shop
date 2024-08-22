@@ -2,9 +2,9 @@ package org.shop;
 
 import org.shop.model.order.Order;
 import org.shop.model.product.Product;
-import org.shop.service.ConsoleOrderInputToProductsConverter;
 import org.shop.service.order.OrderService;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
+import org.shop.service.product.ConsoleProductFactory;
 import org.shop.service.receipt.DefaultReceiptPrintService;
 import org.shop.service.receipt.ReceiptPrintService;
 
@@ -19,14 +19,13 @@ public class Main {
         String input = scanner.nextLine();
         scanner.close();
 
-        ConsoleOrderInputToProductsConverter converter = new ConsoleOrderInputToProductsConverter();
-        List<Product> products = converter.convert(input);
+        List<Product> products = ConsoleProductFactory.produceProduct(input);
 
         CalculateStrategyResolver calculateStrategyResolver = new CalculateStrategyResolver();
         OrderService orderService = new OrderService(calculateStrategyResolver);
         ReceiptPrintService defaultReceiptPrintService = new DefaultReceiptPrintService(orderService);
 
         Order order = orderService.makeOrder(products);
-        defaultReceiptPrintService.printInvoice(order, System.out);
+        defaultReceiptPrintService.printReceipt(order, System.out);
     }
 }

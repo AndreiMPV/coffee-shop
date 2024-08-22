@@ -16,16 +16,22 @@ public class OrderService {
     }
 
     public Order makeOrder(List<Product> products, StampCard stampCard) {
-        return convert(products, stampCard);
+        Order order = convert(products, stampCard);
+        applyBonuses(order);
+        return order;
     }
 
     public Order makeOrder(List<Product> products) {
-        return convert(products, null);
+        Order order = convert(products, null);
+        applyBonuses(order);
+        return order;
     }
 
-    public BigDecimal calculateTotal(Order order) {
-        return order.getTotalCost(calculateStrategyResolver);
+    private void applyBonuses(Order order) {
+        var costCalculationStrategy = calculateStrategyResolver.resolve(order);
+        costCalculationStrategy.applyBonus(order);
     }
+
     private Order convert(List<Product> products, StampCard stampCard) {
         return new Order(products, stampCard);
     }

@@ -1,20 +1,7 @@
 package org.shop.service.receipt;
 
-import org.junit.jupiter.api.Test;
-import org.shop.model.bonus.BonusType;
-import org.shop.model.order.Order;
-import org.shop.model.product.Product;
-import org.shop.model.product.ProductGroup;
-import org.shop.model.product.main.Coffee;
-import org.shop.service.order.OrderService;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 public class DefaultReceiptPrintServiceTest {
 

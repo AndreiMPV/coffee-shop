@@ -1,6 +1,5 @@
 package org.shop.model.order;
 
-import org.shop.model.bonus.BonusType;
 import org.shop.model.bonus.StampCard;
 import org.shop.model.product.Product;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
@@ -24,11 +23,9 @@ public class Order {
         }
     }
 
-    public BigDecimal getTotalCost(CalculateStrategyResolver calculateStrategyResolver) {
-        var costCalculationStrategy = calculateStrategyResolver.resolve(this);
-        costCalculationStrategy.applyBonus(this);
+    public BigDecimal getTotalCost() {
         return products.stream()
-                .map(Product::getCost)
+                .map( product -> product.getInitialTotalCost().subtract(product.getTotalDiscount()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

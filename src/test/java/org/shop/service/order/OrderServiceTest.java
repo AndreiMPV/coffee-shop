@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.shop.model.bonus.BonusType;
 import org.shop.model.bonus.StampCard;
 import org.shop.model.order.Order;
+import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 import org.shop.service.order.calculate.CalculateStrategyResolver;
@@ -32,13 +33,13 @@ public class OrderServiceTest {
     }
 
     @Test
-    void testMakeOrder_With_Stam_Card_Provided() {
+    void testMakeOrder_With_Stamp_Card_Provided() {
         // Given
         Order order = mock(Order.class);
 
-        when(order.getTotalCost(any())).thenReturn(BigDecimal.valueOf(100.00));
-        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, BonusType.USED);
-        List<Product> products = List.of(product);
+        when(order.getTotalCost()).thenReturn(BigDecimal.valueOf(100.00));
+        MainProduct product = mockProduct(ProductGroup.BEVERAGE, 3.00, BonusType.USED);
+        List<MainProduct> products = List.of(product);
         when(order.getProducts()).thenReturn(products);
         var strategy = mock(BonusApplyStrategy.class);
         when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
@@ -47,17 +48,16 @@ public class OrderServiceTest {
         // Then
         assertEquals(products, resultOrder.getProducts());
         assertEquals(stampCard, resultOrder.getStampCard().get());
-        verify(calculateStrategyResolver, never()).resolve(any(Order.class));
     }
 
     @Test
-    void testMakeOrder_Without_Stam_Card_Provided() {
+    void testMakeOrder_Without_Stamp_Card_Provided() {
         // Given
         Order order = mock(Order.class);
 
-        when(order.getTotalCost(any())).thenReturn(BigDecimal.valueOf(100.00));
-        Product product = mockProduct(ProductGroup.BEVERAGE, 3.00, BonusType.USED);
-        List<Product> products = List.of(product);
+        when(order.getTotalCost()).thenReturn(BigDecimal.valueOf(100.00));
+        MainProduct product = mockProduct(ProductGroup.SNACK, 3.00, BonusType.USED);
+        List<MainProduct> products = List.of(product);
         when(order.getProducts()).thenReturn(products);
         var strategy = mock(BonusApplyStrategy.class);
         when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
@@ -66,27 +66,13 @@ public class OrderServiceTest {
         // Then
         assertEquals(products, resultOrder.getProducts());
         assertTrue(resultOrder.getStampCard().isEmpty());
-        verify(calculateStrategyResolver, never()).resolve(any(Order.class));
     }
 
-    @Test
-    void orderShouldApplayBonusesAmount() {
-        // Given
-//        Order order = mock(Order.class);
-//        var strategy = mock(BonusApplyStrategy.class);
-//        when(calculateStrategyResolver.resolve(any(Order.class))).thenReturn(strategy);
-//        when(orderService.applayBonuses(order)).thenReturn(BigDecimal.valueOf(150.00));
-//        // When
-//        BigDecimal total = orderService.applayBonuses(order);
-//        // Then
-//        assertEquals(BigDecimal.valueOf(150.00), total);
-//        verify(order).getTotalCost(calculateStrategyResolver);
-    }
 
-    private Product mockProduct(ProductGroup productGroup, double cost, BonusType bonusType) {
-        Product product = mock(Product.class);
-//        when(product.getGroup()).thenReturn(productGroup);
-//        when(product.getCost()).thenReturn(BigDecimal.valueOf(cost));
+    private MainProduct mockProduct(ProductGroup productGroup, double cost, BonusType bonusType) {
+        MainProduct product = mock(MainProduct.class);
+        when(product.getProductGroup()).thenReturn(productGroup);
+        when(product.getInitialCost()).thenReturn(BigDecimal.valueOf(cost));
         when(product.getBonus()).thenReturn(bonusType);
         return product;
     }

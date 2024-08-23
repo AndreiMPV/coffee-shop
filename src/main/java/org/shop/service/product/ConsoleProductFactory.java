@@ -2,7 +2,7 @@ package org.shop.service.product;
 
 import org.shop.model.product.ExtraProduct;
 import org.shop.model.product.MainProduct;
-import org.shop.model.product.MainProduct.PortionSizeType;
+import org.shop.model.product.PortionSizeType;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.shop.model.product.MainProduct.PortionSizeType.*;
-import static org.shop.model.product.MainProduct.PortionVolumeType.L_0_25;
+import static org.shop.model.product.PortionSizeType.*;
+import static org.shop.model.product.PortionVolumeType.L_0_25;
 import static org.shop.model.product.ProductGroup.*;
 
 
@@ -55,21 +55,21 @@ public class ConsoleProductFactory {
      * @param productListInput a string describing products and optional extras
      * @return a list of {@link MainProduct} created from the input string
      */
-    public static List<MainProduct> produceProduct(String productListInput) {
+    public List<MainProduct> produceProduct(String productListInput) {
         String[] allProducts = productListInput.split(",");
         return Arrays.stream(allProducts)
                 .map(product -> {
                     String[] fullProductDesc = product.split(EXTRA_DELIMITER);
                     String baseProductWithSize = fullProductDesc[BASE_PRODUCT_INDEX];
                     List<String> extras = extractExtras(fullProductDesc);
-                    return ConsoleProductFactory.createProduct(baseProductWithSize, extras);
+                    return createProduct(baseProductWithSize, extras);
                 })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
     }
 
-    private static Optional<MainProduct> createProduct(String baseProductDescription, List<String> extraDescriptions) {
+    private Optional<MainProduct> createProduct(String baseProductDescription, List<String> extraDescriptions) {
         Optional<MainProduct> baseMainProductOpt = Optional.ofNullable(BASE_PRODUCT_MAP.get(normalizedName(baseProductDescription)))
                 .orElse(Collections.emptyList())
                 .stream()

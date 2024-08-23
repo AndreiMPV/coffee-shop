@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 /**
  * The {@code NoStampCardBonusApplyStrategy} class implements the {@link BonusApplyStrategy} interface
  * and provides the strategy for applying bonuses when no stamp card is present.
+ * <p>
+ * This strategy is used in scenarios where the customer does not have a stamp card,
+ * and therefore, the bonus application process should follow a different logic.
+ * </p>
  */
 public class NoStampCardBonusApplyStrategy implements BonusApplyStrategy {
 

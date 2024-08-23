@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 /**
@@ -97,10 +96,6 @@ public class MainProduct implements Product {
         return extraProducts;
     }
 
-    public enum PortionSizeType {
-        SMALL, MEDIUM, LARGE
-    }
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -112,23 +107,6 @@ public class MainProduct implements Product {
     @Override
     public int hashCode() {
         return Objects.hash(extraProducts, productName, productGroup, portionSizeType, portionVolumeType, initialCost, bonus, discountAmount);
-    }
-
-    public enum PortionVolumeType {
-        L_0_25(0.25, "l");
-
-        private final double volume;
-        private final String measure;
-
-        PortionVolumeType(double volume, String measure) {
-            this.volume = volume;
-            this.measure = measure;
-        }
-
-        @Override
-        public String toString() {
-            return this.volume + Optional.ofNullable(this.measure).orElse("");
-        }
     }
 
     public MainProduct deepCopy() {

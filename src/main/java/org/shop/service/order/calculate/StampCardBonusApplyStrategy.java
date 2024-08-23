@@ -2,6 +2,7 @@ package org.shop.service.order.calculate;
 
 import org.shop.model.bonus.BonusType;
 import org.shop.model.order.Order;
+import org.shop.model.product.MainProduct;
 import org.shop.model.product.Product;
 import org.shop.model.product.ProductGroup;
 
@@ -17,9 +18,12 @@ public class StampCardBonusApplyStrategy implements BonusApplyStrategy {
 
     @Override
     public void applyBonus(Order order) {
-        List<Product> canDiscountedBeverages = order.getStampCard().get().getCardProducts().stream()
+        if (order.getStampCard().isEmpty()) {
+            return;
+        }
+        List<MainProduct> canDiscountedBeverages = order.getStampCard().get().getCardProducts().stream()
                 .filter(product -> ProductGroup.BEVERAGE == product.getProductGroup())
-                .filter(product -> product.getBonus() != null && product.getBonus().isCostApplicable())
+                .filter(product -> product.getBonus() == null)
                 .toList();
 
         if (canDiscountedBeverages.size() >= 5) {

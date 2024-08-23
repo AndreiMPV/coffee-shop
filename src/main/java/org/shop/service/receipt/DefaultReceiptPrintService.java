@@ -3,7 +3,8 @@ package org.shop.service.receipt;
 import org.shop.model.order.Order;
 import org.shop.model.product.ExtraProduct;
 import org.shop.model.product.MainProduct;
-import org.shop.service.order.OrderService;
+import org.shop.model.product.PortionSizeType;
+import org.shop.model.product.PortionVolumeType;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -118,13 +119,13 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
 
     public String buildProductDescription(MainProduct product) {
         return Optional.ofNullable(product.getPortionSizeType())
-                        .map(MainProduct.PortionSizeType::name)
+                        .map(PortionSizeType::name)
                         .map(String::toLowerCase)
                         .map(name -> name + " ")
                         .orElse("") +
                     product.getProductName().toLowerCase() + " " +
                 Optional.ofNullable(product.getPortionVolumeType())
-                        .map(MainProduct.PortionVolumeType::name)
+                        .map(PortionVolumeType::name)
                         .map(String::toLowerCase).orElse("") +
                 product.getExtraProducts().stream().map(ExtraProduct::getProductName)
                         .collect(Collectors.joining(" with "));

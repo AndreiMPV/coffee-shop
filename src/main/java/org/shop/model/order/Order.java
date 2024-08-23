@@ -4,7 +4,6 @@ import org.shop.model.bonus.StampCard;
 import org.shop.model.product.MainProduct;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +22,6 @@ public class Order {
      * An optional stamp card associated with the order, used for tracking loyalty rewards.
      */
     private final StampCard stampCard;
-
-    /**
-     * The date and time when the order was created.
-     */
-    private final LocalDateTime dateCreated = LocalDateTime.now();
 
     /**
      * Constructs a new {@code Order} with the specified list of products and a stamp card.
@@ -63,15 +57,6 @@ public class Order {
      */
     public List<MainProduct> getProducts() {
         return products;
-    }
-
-    /**
-     * Returns the date and time when the order was created.
-     *
-     * @return the date and time of order creation as a {@link LocalDateTime}.
-     */
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
     }
 
     /**

@@ -24,7 +24,8 @@ public class Main {
         OrderService orderService = new OrderService(calculateStrategyResolver);
         ReceiptPrintService defaultReceiptPrintService = new DefaultReceiptPrintService();
 
-        List<MainProduct> products = ConsoleProductFactory.produceProduct(input);
+        ConsoleProductFactory consoleProductFactory = new ConsoleProductFactory();
+        List<MainProduct> products = consoleProductFactory.produceProduct(input);
         Order order = orderService.makeOrder(products);
         defaultReceiptPrintService.printReceipt(order, System.out);
     }

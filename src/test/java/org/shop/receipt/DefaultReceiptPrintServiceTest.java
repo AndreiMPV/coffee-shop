@@ -1,52 +1,56 @@
-package org.shop.service.receipt;
+package org.shop.receipt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.shop.model.bonus.BonusType;
+import org.shop.model.order.Order;
+import org.shop.model.product.MainProduct;
+import org.shop.model.product.ProductGroup;
+import org.shop.service.receipt.DefaultReceiptPrintService;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultReceiptPrintServiceTest {
 
-//    @Test
-//    void testPrintOrderReceipt() {
-//        // Arrange
-//        OrderService orderService = mock(OrderService.class);
-//        DefaultReceiptPrintService receiptPrintService = new DefaultReceiptPrintService(orderService);
-//
-//        Product snack = mockProduct(ProductGroup.SNACK, 4.00, new ArrayList<>());
-//        when(snack.getDescription()).thenReturn("Bacon Roll");
-//
-//        Product coffee = mockCoffee(ProductGroup.BEVERAGE, 5.00, new ArrayList<>());
-//        when(coffee.getDescription()).thenReturn("Coffee medium");
-//
-//
-//        Order order = mock(Order.class);
-//        when(order.getProducts()).thenReturn(List.of(snack, coffee, coffee));
-//        when(orderService.calculateTotal(order)).thenReturn(BigDecimal.valueOf(14.00));
-//
-//        String expRoll = "1 x Bacon Roll                                4.0";
-//        String expCoffee = "2 x Coffee medium                            10.0";
-//        String expTotal = "Total:                                       14.00";
-//        // Act
-//        String actualReceipt = receiptPrintService.printOrder(order);
-//
-//        // Assert
-//        assertTrue(actualReceipt.contains(expRoll));
-//        assertTrue(actualReceipt.contains(expCoffee));
-//        assertTrue(actualReceipt.contains(expTotal));
-//    }
-//
-//    private Product mockProduct(ProductGroup productGroup, double cost, List<BonusType> bonusTypes) {
-//        Product product = mock(Product.class);
-//        when(product.getGroup()).thenReturn(productGroup);
-//        when(product.getCost()).thenReturn(BigDecimal.valueOf(cost));
-//        when(product.getBonuses()).thenReturn(bonusTypes);
-//        return product;
-//    }
-//
-//    private Coffee mockCoffee(ProductGroup productGroup, double cost, List<BonusType> bonusTypes) {
-//        Coffee coffee = mock(Coffee.class);
-//        when(coffee.getGroup()).thenReturn(productGroup);
-//        when(coffee.getCost()).thenReturn(BigDecimal.valueOf(cost));
-//        when(coffee.getBonuses()).thenReturn(bonusTypes);
-//        return coffee;
-//    }
+    @Test
+    void testPrintOrderReceipt() {
+        // Arrange
+        DefaultReceiptPrintService receiptPrintService = new DefaultReceiptPrintService();
+
+        MainProduct snack = mockProduct(ProductGroup.SNACK, 4.00, 0, null);
+        when(snack.getProductName()).thenReturn("Bacon Roll");
+
+        MainProduct coffee = mockProduct(ProductGroup.BEVERAGE, 4.00, 1.00, BonusType.FREE);
+        when(coffee.getProductName()).thenReturn("Coffee medium");
+
+
+        Order order = new Order(List.of(snack, coffee, coffee), null);
+
+        String expRoll = " 1 x bacon roll                                4.0";
+        String expCoffee = " 2 x coffee medium                             8.0";
+        String discountCoffee = "                                             -2.00";
+        String expTotal = "Total:                                   10.00 CHF";
+        // Act
+        String actualReceipt = receiptPrintService.printReceipt(order);
+
+        // Assert
+        assertTrue(actualReceipt.contains(expRoll));
+        assertTrue(actualReceipt.contains(expCoffee));
+        assertTrue(actualReceipt.contains(discountCoffee));
+        assertTrue(actualReceipt.contains(expTotal));
+    }
+
+    private MainProduct mockProduct(ProductGroup productGroup, double initialCost, double discount, BonusType bonusType) {
+        MainProduct product = mock(MainProduct.class);
+        when(product.getProductGroup()).thenReturn(productGroup);
+        when(product.getInitialCost()).thenReturn(BigDecimal.valueOf(initialCost));
+        when(product.getInitialTotalCost()).thenReturn(BigDecimal.valueOf(initialCost));
+        when(product.getTotalDiscount()).thenReturn(BigDecimal.valueOf(discount));
+        when(product.getBonus()).thenReturn(bonusType);
+        return product;
+    }
 }

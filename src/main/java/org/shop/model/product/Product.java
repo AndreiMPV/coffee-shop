@@ -55,7 +55,7 @@ public interface Product {
     BigDecimal getInitialCost();
 
     /**
-     * Gets the initial total cost of the product, before any discounts are applied.
+     * Gets the initial total cost of the product with extra products, before any discounts are applied.
      *
      * @return the initial total cost as a {@link BigDecimal}.
      */

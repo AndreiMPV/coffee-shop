@@ -8,18 +8,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class StampCard {
-    private final String uuid = UUID.randomUUID().toString();
     private final String ownerFirstName;
     private final String ownerLastName;
-    private final List<Product> stampCardProducts = new ArrayList<>();
+    private final List<MainProduct> stampCardProducts = new ArrayList<>();
 
     public StampCard(String ownerFirstName, String ownerLastName) {
         this.ownerFirstName = ownerFirstName;
         this.ownerLastName = ownerLastName;
-    }
-
-    public String getUuid() {
-        return uuid;
     }
 
     public String getOwnerFirstName() {
@@ -30,7 +25,7 @@ public class StampCard {
         return ownerLastName;
     }
 
-    public List<Product> getCardProducts() {
+    public List<MainProduct> getCardProducts() {
         return stampCardProducts;
     }
 

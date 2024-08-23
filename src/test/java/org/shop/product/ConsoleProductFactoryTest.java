@@ -20,18 +20,18 @@ class ConsoleProductFactoryTest {
     }
 
     @Test
-    void testProduceProduct_withValidBaseProduct() {
+    void testProduceProduct_withValidBaseProducts() {
         String productListInput = "Large Coffee";
-        List<MainProduct> products = consoleProductFactory.produceProduct(productListInput);
+        List<MainProduct> products = consoleProductFactory.produceProducts(productListInput);
         assertEquals(1, products.size());
         assertEquals("coffee", products.get(0).getProductName().toLowerCase());
         assertEquals(LARGE, products.get(0).getPortionSizeType());
     }
 
     @Test
-    void testProduceProduct_withValidBaseProductAndExtras() {
+    void testProduceProduct_withValidBaseProductsAndExtras() {
         String productListInput = "Medium Coffee with Extra milk,Small Coffee with Foamed milk";
-        List<MainProduct> products = consoleProductFactory.produceProduct(productListInput);
+        List<MainProduct> products = consoleProductFactory.produceProducts(productListInput);
         assertEquals(2, products.size());
 
         MainProduct firstProduct = products.get(0);
@@ -48,24 +48,24 @@ class ConsoleProductFactoryTest {
     }
 
     @Test
-    void testProduceProduct_withInvalidBaseProduct() {
+    void testProduceProduct_withInvalidBaseProducts() {
         String productListInput = "Large Tea";
-        List<MainProduct> products = consoleProductFactory.produceProduct(productListInput);
+        List<MainProduct> products = consoleProductFactory.produceProducts(productListInput);
         assertEquals(0, products.size());
     }
 
     @Test
-    void testProduceProduct_withUnknownExtra() {
+    void testProduceProducts_withUnknownExtra() {
         String productListInput = "Large Coffee with Honey";
-        List<MainProduct> products = consoleProductFactory.produceProduct(productListInput);
+        List<MainProduct> products = consoleProductFactory.produceProducts(productListInput);
         assertEquals(1, products.size());
         assertTrue(products.get(0).getExtraProducts().isEmpty());
     }
 
     @Test
-    void testProduceProduct_withMultipleExtras() {
+    void testProduceProducts_withMultipleExtras() {
         String productListInput = "Large Coffee with Extra milk with Special roast";
-        List<MainProduct> products = consoleProductFactory.produceProduct(productListInput);
+        List<MainProduct> products = consoleProductFactory.produceProducts(productListInput);
         assertEquals(1, products.size());
         MainProduct product = products.get(0);
         assertEquals(2, product.getExtraProducts().size());

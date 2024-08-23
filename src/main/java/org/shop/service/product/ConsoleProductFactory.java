@@ -55,7 +55,7 @@ public class ConsoleProductFactory {
      * @param productListInput a string describing products and optional extras
      * @return a list of {@link MainProduct} created from the input string
      */
-    public List<MainProduct> produceProduct(String productListInput) {
+    public List<MainProduct> produceProducts(String productListInput) {
         String[] allProducts = productListInput.split(",");
         return Arrays.stream(allProducts)
                 .map(product -> {

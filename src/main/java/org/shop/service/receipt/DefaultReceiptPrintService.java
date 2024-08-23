@@ -128,6 +128,7 @@ public class DefaultReceiptPrintService implements ReceiptPrintService {
                         .map(PortionVolumeType::name)
                         .map(String::toLowerCase).orElse("") +
                 product.getExtraProducts().stream().map(ExtraProduct::getProductName)
+                        .map(String::toLowerCase)
                         .collect(Collectors.joining(" with "));
     }
 }

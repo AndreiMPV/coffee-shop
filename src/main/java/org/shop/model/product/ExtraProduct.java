@@ -66,6 +66,6 @@ public class ExtraProduct implements Product {
     }
 
     public ExtraProduct deepCopy() {
-        return new ExtraProduct(this.productName, this.initialCost.toBigInteger().doubleValue());
+        return new ExtraProduct(this.productName, this.initialCost.doubleValue());
     }
 }

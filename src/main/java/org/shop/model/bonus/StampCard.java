@@ -1,11 +1,9 @@
 package org.shop.model.bonus;
 
 import org.shop.model.product.MainProduct;
-import org.shop.model.product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class StampCard {
     private final String ownerFirstName;
